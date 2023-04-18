@@ -1,0 +1,93 @@
+[gd_scene load_steps=13 format=3 uid="uid://bl7rsui6xsmfb"]
+
+[ext_resource type="Shader" path="res://Shaders/Water Plane.gdshader" id="1_q2wfr"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_d2l67"]
+size = Vector2(10.05, 10.05)
+subdivide_width = 100
+subdivide_depth = 100
+orientation = 1
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_h703p"]
+noise_type = 3
+frequency = 0.032
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_y2btk"]
+seamless = true
+as_normal_map = true
+bump_strength = 1.6
+noise = SubResource("FastNoiseLite_h703p")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_okv0n"]
+noise_type = 0
+seed = 22
+frequency = 0.003
+fractal_lacunarity = 1.6
+fractal_gain = 0.47
+fractal_weighted_strength = 0.53
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_fdjef"]
+seamless = true
+seamless_blend_skirt = 0.532
+as_normal_map = true
+bump_strength = 21.8
+noise = SubResource("FastNoiseLite_okv0n")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_w5qxd"]
+noise_type = 4
+fractal_type = 2
+fractal_gain = 0.34
+fractal_weighted_strength = 0.8
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_t2foe"]
+seamless = true
+noise = SubResource("FastNoiseLite_w5qxd")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_vw6qn"]
+noise_type = 4
+fractal_type = 2
+fractal_gain = 0.34
+fractal_weighted_strength = 0.8
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1s88o"]
+seamless = true
+as_normal_map = true
+bump_strength = 1.5
+noise = SubResource("FastNoiseLite_vw6qn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a23bu"]
+render_priority = 0
+shader = ExtResource("1_q2wfr")
+shader_parameter/albedo = Color(0, 0.32, 0.43, 1)
+shader_parameter/albedo2 = Color(0, 0.47, 0.76, 1)
+shader_parameter/metallic = 0.0
+shader_parameter/roughness = 0.02
+shader_parameter/wave_direction = Vector2(0.5, -0.5)
+shader_parameter/wave_direction2 = Vector2(-0.5, 0.5)
+shader_parameter/time_scale = 0.1
+shader_parameter/noise_scale = 20.0
+shader_parameter/height_scale = 2.0
+shader_parameter/color_deep = Color(0.11, 0.29, 0.33, 1)
+shader_parameter/color_shallow = Color(0, 0.47, 0.76, 1)
+shader_parameter/beers_law = 2.0
+shader_parameter/depth_offset = 1.5
+shader_parameter/edge_scale = 0.3
+shader_parameter/near = 1.0
+shader_parameter/far = 100.0
+shader_parameter/edge_color = Color(1, 1, 1, 1)
+shader_parameter/wave = SubResource("NoiseTexture2D_t2foe")
+shader_parameter/wave_bump = SubResource("NoiseTexture2D_1s88o")
+shader_parameter/texture_normal = SubResource("NoiseTexture2D_y2btk")
+shader_parameter/texture_normal2 = SubResource("NoiseTexture2D_fdjef")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_haup1"]
+
+[node name="MeshInstance3D" type="MeshInstance3D"]
+cast_shadow = 0
+mesh = SubResource("QuadMesh_d2l67")
+surface_material_override/0 = SubResource("ShaderMaterial_a23bu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.946, 0.674932)
+visible = false
+mesh = SubResource("CapsuleMesh_haup1")
